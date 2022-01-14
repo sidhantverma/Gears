@@ -1,0 +1,36 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Gears.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="DrawingColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Fuchsia</Value>
+    </Setting>
+    <Setting Name="DrawingWidth" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">3</Value>
+    </Setting>
+    <Setting Name="DrawingShape" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Rectangle</Value>
+    </Setting>
+    <Setting Name="DrawingFont" Type="System.Drawing.Font" Scope="User">
+      <Value Profile="(Default)">Segoe Print, 12pt</Value>
+    </Setting>
+    <Setting Name="DrawingText" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Hello World!</Value>
+    </Setting>
+    <Setting Name="DrawingTextColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Red</Value>
+    </Setting>
+    <Setting Name="RunAtStartup" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ST_SearchPaths" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ST_SearchTerms" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ShelveStoreLocation" Type="System.String" Scope="User">
+      <Value Profile="(Default)">D:\Shelve Store\</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
