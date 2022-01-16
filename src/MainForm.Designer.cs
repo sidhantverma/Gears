@@ -57,6 +57,7 @@
 			this.toolStripMenuItemSystemInfo = new System.Windows.Forms.ToolStripMenuItem();
 			this.getHostnameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.getCurrentIPAddressToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.getEthernetIPv4AddressToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
 			this.keepSystemAwakeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem8 = new System.Windows.Forms.ToolStripSeparator();
@@ -101,7 +102,7 @@
 			// 
 			this.notifyIconGears.ContextMenuStrip = this.contextMenuGears;
 			this.notifyIconGears.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIconGears.Icon")));
-			this.notifyIconGears.Text = "Gears - Productivity Tools";
+			this.notifyIconGears.Text = "Gears";
 			this.notifyIconGears.Visible = true;
 			this.notifyIconGears.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseClick);
 			// 
@@ -287,7 +288,7 @@
 			// toolStripMenuItem7
 			// 
 			this.toolStripMenuItem7.Name = "toolStripMenuItem7";
-			this.toolStripMenuItem7.Size = new System.Drawing.Size(180, 22);
+			this.toolStripMenuItem7.Size = new System.Drawing.Size(117, 22);
 			this.toolStripMenuItem7.Text = "Reset IIS";
 			this.toolStripMenuItem7.Click += new System.EventHandler(this.resetIIStoolStripMenuItem_Click);
 			// 
@@ -296,6 +297,7 @@
 			this.toolStripMenuItemSystemInfo.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.getHostnameToolStripMenuItem,
             this.getCurrentIPAddressToolStripMenuItem,
+            this.getEthernetIPv4AddressToolStripMenuItem,
             this.toolStripMenuItem10,
             this.keepSystemAwakeToolStripMenuItem});
 			this.toolStripMenuItemSystemInfo.Name = "toolStripMenuItemSystemInfo";
@@ -305,26 +307,33 @@
 			// getHostnameToolStripMenuItem
 			// 
 			this.getHostnameToolStripMenuItem.Name = "getHostnameToolStripMenuItem";
-			this.getHostnameToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+			this.getHostnameToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
 			this.getHostnameToolStripMenuItem.Text = "Get Hostname";
 			this.getHostnameToolStripMenuItem.Click += new System.EventHandler(this.getHostnameToolStripMenuItem_Click);
 			// 
 			// getCurrentIPAddressToolStripMenuItem
 			// 
 			this.getCurrentIPAddressToolStripMenuItem.Name = "getCurrentIPAddressToolStripMenuItem";
-			this.getCurrentIPAddressToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
-			this.getCurrentIPAddressToolStripMenuItem.Text = "Get Current IP Address";
-			this.getCurrentIPAddressToolStripMenuItem.Click += new System.EventHandler(this.getCurrentIPAddressToolStripMenuItem_Click);
+			this.getCurrentIPAddressToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+			this.getCurrentIPAddressToolStripMenuItem.Text = "Get Wi-Fi IPv4 Address";
+			this.getCurrentIPAddressToolStripMenuItem.Click += new System.EventHandler(this.getWiFiIPv4AddressToolStripMenuItem_Click);
+			// 
+			// getEthernetIPv4AddressToolStripMenuItem
+			// 
+			this.getEthernetIPv4AddressToolStripMenuItem.Name = "getEthernetIPv4AddressToolStripMenuItem";
+			this.getEthernetIPv4AddressToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+			this.getEthernetIPv4AddressToolStripMenuItem.Text = "Get Ethernet IPv4 Address";
+			this.getEthernetIPv4AddressToolStripMenuItem.Click += new System.EventHandler(this.getEthernetIPv4AddressToolStripMenuItem_Click);
 			// 
 			// toolStripMenuItem10
 			// 
 			this.toolStripMenuItem10.Name = "toolStripMenuItem10";
-			this.toolStripMenuItem10.Size = new System.Drawing.Size(187, 6);
+			this.toolStripMenuItem10.Size = new System.Drawing.Size(203, 6);
 			// 
 			// keepSystemAwakeToolStripMenuItem
 			// 
 			this.keepSystemAwakeToolStripMenuItem.Name = "keepSystemAwakeToolStripMenuItem";
-			this.keepSystemAwakeToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+			this.keepSystemAwakeToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
 			this.keepSystemAwakeToolStripMenuItem.Text = "Keep System Awake";
 			this.keepSystemAwakeToolStripMenuItem.Click += new System.EventHandler(this.keepSystemAwakeToolStripMenuItem_Click);
 			// 
@@ -602,7 +611,6 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Gears - Dev Productivity Tools";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GearsUI_FormClosing);
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.GearsUI_Paint);
 			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.GearsUI_KeyDown);
 			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.GearsUI_KeyUp);
@@ -681,6 +689,7 @@
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem7;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem8;
 		private System.Windows.Forms.ToolStripSeparator toolStripMenuItem10;
+		private System.Windows.Forms.ToolStripMenuItem getEthernetIPv4AddressToolStripMenuItem;
 	}
 }
 

@@ -25,12 +25,12 @@ namespace Gears
 			{
 				ActionResult.Result = this._clipboardAction.Execute(input);
 				ActionResult.Status = Status.Completed;
-				ActionResult.StatusMessage = $"Completed: {this._clipboardAction.Name}";
+				ActionResult.StatusMessage = $"Success: {this._clipboardAction.Name}";
 			}
 			catch (Exception ex)
 			{
 				ActionResult.Status = Status.Failed;
-				ActionResult.StatusMessage = $"Failed: {this._clipboardAction.Name} Reason: {ex.Message}";
+				ActionResult.StatusMessage = $"Error: {this._clipboardAction.Name} {Environment.NewLine}Reason: {ex.Message}";
 			}
 
 			return ActionResult;

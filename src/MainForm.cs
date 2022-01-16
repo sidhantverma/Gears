@@ -8,6 +8,7 @@ using System.IO;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -37,47 +38,7 @@ namespace Gears
 		public MainForm()
 		{
 			InitializeComponent();
-
-			screenWidth = Screen.PrimaryScreen.Bounds.Width;
-			screenHeight = Screen.PrimaryScreen.Bounds.Height;
-
-			pen = new Pen(this.DrawingColor, this.DrawingWidth);
-			brush = new SolidBrush(this.DrawingColor);
-
-			drawingColorToolStripMenuItem.BackColor = DrawingColor;
-			drawingColorToolStripMenuItem.ForeColor = (PerceivedBrightness(DrawingColor) > 130 ? Color.Black : Color.White);
-
-			stackBitmap = new BitmapStack();
-
-			UpdateShape();
-			UpdateWidth();
 			ConfigureRunAtStartup();
-
-			notifyIconGears.Visible = true;
-
-			//try
-			//{
-			//	drawingHotKey = new Hotkey();
-			//	drawingHotKey.WindowsKey = true;
-			//	drawingHotKey.KeyCode = Keys.Z;
-			//	drawingHotKey.HotkeyPressed += drawingHotKey_HotkeyPressed;
-			//	drawingHotKey.Enabled = true;
-
-			//	openCntxtMenuHotKey = new Hotkey();
-			//	openCntxtMenuHotKey.WindowsKey = true;
-			//	openCntxtMenuHotKey.KeyCode = Keys.X;
-			//	openCntxtMenuHotKey.HotkeyPressed += openCntxtMenuHotKey_HotkeyPressed;
-			//	openCntxtMenuHotKey.Enabled = true;
-			//}
-			//catch(Exception ex)
-			//{
-			//	MessageBox.Show("Could not register one or more hot key shortcut(s)!", "Gears", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-			//}
-		}
-
-		void drawingHotKey_HotkeyPressed(object sender, EventArgs e)
-		{
-			StartOnScreenDrawing();
 		}
 
 		void openCntxtMenuHotKey_HotkeyPressed(object sender, EventArgs e)
@@ -230,11 +191,6 @@ namespace Gears
 			}
 		}
 
-		private void GearsUI_FormClosing(object sender, FormClosingEventArgs e)
-		{
-			notifyIconGears.Visible = false;
-		}
-
 		private void exitToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			Application.Exit();
@@ -242,6 +198,20 @@ namespace Gears
 
 		private void startOnScreenDrawingToolStripMenuItem_Click(object sender, EventArgs e)
 		{
+			screenWidth = Screen.PrimaryScreen.Bounds.Width;
+			screenHeight = Screen.PrimaryScreen.Bounds.Height;
+
+			pen = new Pen(this.DrawingColor, this.DrawingWidth);
+			brush = new SolidBrush(this.DrawingColor);
+
+			drawingColorToolStripMenuItem.BackColor = DrawingColor;
+			drawingColorToolStripMenuItem.ForeColor = (PerceivedBrightness(DrawingColor) > 130 ? Color.Black : Color.White);
+
+			stackBitmap = new BitmapStack();
+
+			UpdateShape();
+			UpdateWidth();
+
 			StartOnScreenDrawing();
 		}
 
@@ -540,7 +510,7 @@ namespace Gears
 			var ctx = new ClipboardActionContext(new LineBreakToCommaClipAction());
 			ctx.Execute(Clipboard.GetText());
 			SetClipboardText(ctx);
-		}		
+		}
 
 		private void lineBreakToLineBreakCommaToolStripMenuItem_Click(object sender, EventArgs e)
 		{
@@ -580,11 +550,11 @@ namespace Gears
 				columnsList = columnsList.Remove(columnsList.LastIndexOf(','));
 				Clipboard.SetText(columnsList);
 
-				ShowGearsBaloonTip("Enclosed column names in square brackets", ToolTipIcon.Info);
+				ShowGearsBaloonTip("Success: Enclose column names in square brackets", ToolTipIcon.Info);
 			}
 			else
 			{
-				ShowGearsBaloonTip("No text available in clipboard", ToolTipIcon.Error);
+				ShowGearsBaloonTip("Error: No text available in clipboard", ToolTipIcon.Error);
 			}
 		}
 
@@ -595,11 +565,11 @@ namespace Gears
 			{
 				Clipboard.SetText(RegExReplace(@"(?:\\)(\\)", Clipboard.GetText(), @"\"));
 
-				ShowGearsBaloonTip("Converted double backslash to single backslash", ToolTipIcon.Info);
+				ShowGearsBaloonTip("Success: Converte double backslash to single backslash", ToolTipIcon.Info);
 			}
 			else
 			{
-				ShowGearsBaloonTip("No text available in clipboard", ToolTipIcon.Error);
+				ShowGearsBaloonTip("Error: No text available in clipboard", ToolTipIcon.Error);
 			}
 		}
 
@@ -610,11 +580,11 @@ namespace Gears
 			{
 				Clipboard.SetText(RegExReplace(@"(?<!\\)\\(?!\\)", Clipboard.GetText(), @"\\"));
 
-				ShowGearsBaloonTip("Converted single backslash to double backslash", ToolTipIcon.Info);
+				ShowGearsBaloonTip("Success: Converte single backslash to double backslash", ToolTipIcon.Info);
 			}
 			else
 			{
-				ShowGearsBaloonTip("No text available in clipboard", ToolTipIcon.Error);
+				ShowGearsBaloonTip("Error: No text available in clipboard", ToolTipIcon.Error);
 			}
 		}
 
@@ -626,26 +596,28 @@ namespace Gears
 				{
 					string text = Clipboard.GetText().Replace("\"", "");
 					Uri urlOrFilePath = new Uri(text);
-
+					string fileName;
 					if (urlOrFilePath.IsFile)
 					{
-						Clipboard.SetText(new FileInfo(text).Name);
+						fileName = new FileInfo(text).Name;
+						Clipboard.SetText(fileName);
 					}
 					else
 					{
-						Clipboard.SetText(RegExMatch(@"(\w+\.\w+)$", urlOrFilePath.AbsolutePath));
+						fileName = RegExMatch(@"(\w+\.\w+)$", urlOrFilePath.AbsolutePath);
+						Clipboard.SetText(fileName);
 					}
 
-					ShowGearsBaloonTip("File name extracted", ToolTipIcon.Info);
+					ShowGearsBaloonTip("Success: Extract file name from URL or Path" + Environment.NewLine + fileName, ToolTipIcon.Info);
 				}
 				catch
 				{
-					ShowGearsBaloonTip("Invalid characters in URL or File Path", ToolTipIcon.Error);
+					ShowGearsBaloonTip("Error: Invalid characters in URL or Path", ToolTipIcon.Error);
 				}
 			}
 			else
 			{
-				ShowGearsBaloonTip("No text available in clipboard", ToolTipIcon.Error);
+				ShowGearsBaloonTip("Error: No text available in clipboard", ToolTipIcon.Error);
 			}
 		}
 
@@ -654,11 +626,11 @@ namespace Gears
 			if (Clipboard.ContainsText())
 			{
 				Clipboard.SetText(RegExReplace("(\r\n)+", Clipboard.GetText(), Environment.NewLine));
-				ShowGearsBaloonTip("Empty lines removed", ToolTipIcon.Info);
+				ShowGearsBaloonTip("Success: Remove empty lines", ToolTipIcon.Info);
 			}
 			else
 			{
-				ShowGearsBaloonTip("No text available in clipboard", ToolTipIcon.Error);
+				ShowGearsBaloonTip("Error: No text available in clipboard", ToolTipIcon.Error);
 			}
 		}
 
@@ -718,28 +690,12 @@ namespace Gears
 
 				string text = Clipboard.GetText();
 
-				//foreach (char c in startWrappers)
-				//{
-				//	if (text.StartsWith(c.ToString()))
-				//	{
-				//		text = text.Remove(0, 1);
-				//	}
-				//}
-				//
-				//foreach (char c in endWrappers)
-				//{
-				//	if (text.EndsWith(c.ToString()))
-				//	{
-				//		text = text.Remove(text.Length-1, 1);
-				//	}
-				//}
-
 				Clipboard.SetText(p1 + text + p2);
-				ShowGearsBaloonTip("Clipboard mode applied", ToolTipIcon.Info);
+				ShowGearsBaloonTip("Success: Enclose text " + p1 + " " + p2, ToolTipIcon.Info);
 			}
 			else
 			{
-				ShowGearsBaloonTip("No text available in clipboard", ToolTipIcon.Error);
+				ShowGearsBaloonTip("Error: No text available in clipboard", ToolTipIcon.Error);
 			}
 		}
 
@@ -748,11 +704,11 @@ namespace Gears
 			if (Clipboard.ContainsText())
 			{
 				Clipboard.SetText(String.Format("'{0}'", RegExReplace("(')+", Clipboard.GetText(), "''")));
-				ShowGearsBaloonTip("SQL Stringify mode applied", ToolTipIcon.Info);
+				ShowGearsBaloonTip("Success: SQL Stringify", ToolTipIcon.Info);
 			}
 			else
 			{
-				ShowGearsBaloonTip("No text available in clipboard", ToolTipIcon.Error);
+				ShowGearsBaloonTip("Error: No text available in clipboard", ToolTipIcon.Error);
 			}
 		}
 
@@ -762,11 +718,11 @@ namespace Gears
 			{
 				string text = Clipboard.GetText();
 				Clipboard.SetText(text);
-				ShowGearsBaloonTip("Cleared text formatting", ToolTipIcon.Info);
+				ShowGearsBaloonTip("Success: Cleare text formatting", ToolTipIcon.Info);
 			}
 			else
 			{
-				ShowGearsBaloonTip("No text available in clipboard", ToolTipIcon.Error);
+				ShowGearsBaloonTip("Error: No text available in clipboard", ToolTipIcon.Error);
 			}
 		}
 
@@ -800,7 +756,7 @@ namespace Gears
 			}
 			catch
 			{
-				ShowGearsBaloonTip("Error reading or writing in registry", ToolTipIcon.Error);
+				ShowGearsBaloonTip("Error: Could not set value in registry", ToolTipIcon.Error);
 			}
 
 		}
@@ -823,69 +779,95 @@ namespace Gears
 					string formatted = XDocument.Parse(Clipboard.GetText()).ToString();
 
 					Clipboard.SetText(formatted);
-					ShowGearsBaloonTip("Cleared text formatting", ToolTipIcon.Info);
+					ShowGearsBaloonTip("Success: Prettify XML", ToolTipIcon.Info);
 				}
 				catch
 				{
-					ShowGearsBaloonTip("Error parsing XML content.", ToolTipIcon.Error);
+					Clipboard.Clear();
+					ShowGearsBaloonTip("Error: Invalid XML content", ToolTipIcon.Error);
 				}
 			}
 			else
 			{
-				ShowGearsBaloonTip("No text available in clipboard", ToolTipIcon.Error);
+				ShowGearsBaloonTip("Error: No text available in clipboard", ToolTipIcon.Error);
 			}
 		}
 
-		private void getCurrentIPAddressToolStripMenuItem_Click(object sender, EventArgs e)
+		private void getWiFiIPv4AddressToolStripMenuItem_Click(object sender, EventArgs e)
 		{
+			GetNetworkIP("Wi-Fi");
+		}
 
+		private void getEthernetIPv4AddressToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			GetNetworkIP("Ethernet");
+		}
+
+		private void GetNetworkIP(string adapter)
+		{
 			try
 			{
-				if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable())
+				if (!NetworkInterface.GetIsNetworkAvailable())
 				{
-					throw new Exception("Not connected");
+					throw new Exception("Not connected to any network.");
 				}
 
-				string ip = GetLocalIPv4(NetworkInterfaceType.Ethernet);
-				Clipboard.SetText(ip);
-				ShowGearsBaloonTip($"Current IPv4 Ethernet address is {ip}", ToolTipIcon.Info);
+				string ipAddress = string.Empty;
+				string netInfo = GetNetworkInformation(adapter, out ipAddress);
+
+				Clipboard.SetText(ipAddress);
+
+				ShowGearsBaloonTip($"Success: Get {adapter} IPv4 Address" + Environment.NewLine + netInfo, ToolTipIcon.Info);
 			}
-			catch
+			catch(Exception ex)
 			{
-				ShowGearsBaloonTip("Error getting IP address.", ToolTipIcon.Error);
+				Clipboard.Clear();
+				ShowGearsBaloonTip("Error: " + ex.Message, ToolTipIcon.Error);
 			}
 		}
 
-		public string GetLocalIPv4(NetworkInterfaceType _type)
+		private string GetNetworkInformation(string adapter, out string ipAddress)
 		{
-			string output = "";
+			StringBuilder netInfo = new StringBuilder(String.Empty);
+			ipAddress = string.Empty;
+
 			foreach (NetworkInterface item in NetworkInterface.GetAllNetworkInterfaces())
 			{
-				if (item.NetworkInterfaceType == _type && item.OperationalStatus == OperationalStatus.Up)
+				if (item.OperationalStatus == OperationalStatus.Up && item.Name == adapter)
 				{
+					netInfo.AppendLine(item.Description);
+
 					foreach (UnicastIPAddressInformation ip in item.GetIPProperties().UnicastAddresses)
 					{
 						if (ip.Address.AddressFamily == AddressFamily.InterNetwork)
 						{
-							output = ip.Address.ToString();
-							return output;
+							ipAddress = ip.Address.ToString();
+							netInfo.AppendLine(ipAddress);
 						}
 					}
 				}
+
 			}
-			return output;
+
+			if (netInfo.ToString() == string.Empty)
+			{
+				throw new Exception("Not connected to any network.");
+			}
+
+			return netInfo.ToString();
 		}
 
 		private void getHostnameToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			try
 			{
-				Clipboard.SetText(System.Environment.MachineName);
-				ShowGearsBaloonTip("Hostname copied to clipboard", ToolTipIcon.Info);
+				Clipboard.SetText(Environment.MachineName);
+				ShowGearsBaloonTip("Success: Get Hostname" + Environment.NewLine + Environment.MachineName, ToolTipIcon.Info);
 			}
-			catch
+			catch(Exception ex)
 			{
-				ShowGearsBaloonTip("Error getting hostname.", ToolTipIcon.Error);
+				Clipboard.Clear();
+				ShowGearsBaloonTip("Error: " + ex.Message, ToolTipIcon.Error);
 			}
 		}
 
@@ -933,7 +915,7 @@ namespace Gears
 					RedirectStandardOutput = true
 				};
 
-				ShowGearsBaloonTip("Reset IIS initiated", ToolTipIcon.Warning);
+				ShowGearsBaloonTip("Reset IIS initiated", ToolTipIcon.Info);
 
 				p.Start();
 
@@ -945,7 +927,7 @@ namespace Gears
 			}
 			catch (Exception)
 			{
-				ShowGearsBaloonTip("Error Resetting IIS.", ToolTipIcon.Error);
+				ShowGearsBaloonTip("Error: Reset IIS", ToolTipIcon.Error);
 			}
 		}
 
